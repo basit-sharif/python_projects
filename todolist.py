@@ -157,12 +157,27 @@ def proccessTodos(back, loggedInUser: str):
                 "\nPlease Enter the todo name to be deleted ")
             deleteTodo(loggedInUser["userId"], todoNameToBeDel)
         elif (choiceForTodos == 4):
-            print("Updated Comming Soon")
+            todoNameToBeUpdated = get_required_input(
+                "\nPlease Enter the todo name to be updated ")
+            newStatus = get_required_input("\nPlease enter the new status ")
+            updateTodo(loggedInUser["userId"], todoNameToBeUpdated, newStatus)
         elif (choiceForTodos == 5):
             back(main, loggedInUser)
             break
         elif (choiceForTodos == 6):
             break
+
+
+def updateTodo(userId: str, todoName: str, newStatus: str):
+    todoOldDataWithId = todoData.get(userId)
+    if todoOldDataWithId:
+        for todo in todoOldDataWithId:
+            if todo["todoName"] == todoName:
+                todo["todoStatus"] = newStatus
+                return
+        print(f"\nCould not found '{todoName}' todo ")
+    else:
+        print(f"\nUser not found and '{todoName}' todo also not found ")
 
 
 def deleteTodo(userId: str, todoName: str):
@@ -172,7 +187,7 @@ def deleteTodo(userId: str, todoName: str):
             if todo["todoName"] == todoName:
                 todoList.remove(todo)
                 print(f"\nTodo '{todoName}' deleted successfully.\n")
-                return;
+                return
         print(f"\nTodo '{todoName}' not found.\n")
     else:
         print(f"\n User Not Exists and todo '{todoName}' not found! \n")
